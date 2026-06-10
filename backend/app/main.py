@@ -7,6 +7,7 @@ from app.api.extract import router as extract_router
 from app.api.patents import router as patent_router
 from app.api.datasets import router as dataset_router
 from app.api.trends import router as trend_router
+from app.api.graph import router as graph_router
 
 app = FastAPI(
     title="AROS"
@@ -141,4 +142,10 @@ app.include_router(
     trend_router,
     prefix="/trends",
     tags=["Trends"]
+)
+
+app.include_router(
+    graph_router,
+    prefix="/graph",
+    tags=["Graph"]
 )
