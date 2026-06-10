@@ -8,6 +8,7 @@ from app.api.patents import router as patent_router
 from app.api.datasets import router as dataset_router
 from app.api.trends import router as trend_router
 from app.api.graph import router as graph_router
+from app.api.citations import router as citation_router
 
 app = FastAPI(
     title="AROS"
@@ -119,11 +120,29 @@ app.include_router(
 from app.api.fusion import (
     router as fusion_router
 )
+from app.api.fusion_v2 import (
+    router as fusion_v2_router
+)
+from app.api.research_gap_v2 import (
+    router as gap_v2_router
+)
 
 app.include_router(
     fusion_router,
     prefix="/fusion",
     tags=["Fusion"]
+)
+
+app.include_router(
+    fusion_v2_router,
+    prefix="/fusion-v2",
+    tags=["Fusion V2"]
+)
+
+app.include_router(
+    gap_v2_router,
+    prefix="/research-gap-v2",
+    tags=["Research Gap V2"]
 )
 
 app.include_router(
@@ -148,4 +167,10 @@ app.include_router(
     graph_router,
     prefix="/graph",
     tags=["Graph"]
+)
+
+app.include_router(
+    citation_router,
+    prefix="/citations",
+    tags=["Citations"]
 )

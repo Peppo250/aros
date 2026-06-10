@@ -138,6 +138,106 @@ class Neo4jClient:
             "relationship_count": rel_count
         }
 
+    def get_graph_insights(self, project_id: str):
+        insights = {
+            "node_counts": {
+                "Paper": 0,
+                "Repository": 0,
+                "Patent": 0,
+                "Dataset": 0,
+                "Trend": 0
+            },
+            "relationship_count": 0,
+            "top_connected": [],
+            "statistics": {
+                "avg_overlap": 0.0,
+                "max_overlap": 0
+            },
+            "most_connected_paper": None,
+            "most_connected_repo": None,
+            "most_connected_dataset": None
+        }
+        if not self.driver:
+            return insights
+
+        try:
+            with self.driver.session() as session:
+                # 1. Summary
+                summary = self.get_summary(project_id)
+                if "error" not in summary:
+                    insights["node_counts"] = summary.get("node_counts", {})
+                    insights["relationship_count"] = summary.get("relationship_count", 0)
+
+                # 2. Top connected entities
+                q_top = """
+                MATCH (n) WHERE n.project_id = $project_id
+                OPTIONAL MATCH (n)-[r:RELATED_TO]-()
+                RETURN n.title AS title, labels(n)[0] AS type, count(r) AS degree
+                ORDER BY degree DESC
+                LIMIT 5
+                """
+                res_top = session.run(q_top, project_id=project_id)
+                for record in res_top:
+                    insights["top_connected"].append({
+                        "title": record["title"] or "Unnamed",
+                        "type": record["type"] or "Unknown",
+                        "degree": record["degree"]
+                    })
+
+                # 3. Statistics (Average overlap, max overlap)
+                q_stats = """
+                MATCH (a)-[r:RELATED_TO]->(b) WHERE a.project_id = $project_id
+                RETURN avg(r.overlap_count) AS avg_overlap, max(r.overlap_count) AS max_overlap
+                """
+                res_stats = session.run(q_stats, project_id=project_id)
+                rec_stats = res_stats.single()
+                if rec_stats:
+                    insights["statistics"]["avg_overlap"] = rec_stats["avg_overlap"] or 0.0
+                    insights["statistics"]["max_overlap"] = rec_stats["max_overlap"] or 0
+
+                # 4. Centrality breakdowns (Paper, Repository, Dataset)
+                q_m_paper = """
+                MATCH (p:Paper) WHERE p.project_id = $project_id
+                OPTIONAL MATCH (p)-[r:RELATED_TO]-()
+                WITH p, count(r) AS degree
+                ORDER BY degree DESC
+                LIMIT 1
+                RETURN p.title AS title
+                """
+                r_paper = session.run(q_m_paper, project_id=project_id).single()
+                if r_paper and r_paper["title"]:
+                    insights["most_connected_paper"] = r_paper["title"]
+
+                q_m_repo = """
+                MATCH (r:Repository) WHERE r.project_id = $project_id
+                OPTIONAL MATCH (r)-[rel:RELATED_TO]-()
+                WITH r, count(rel) AS degree
+                ORDER BY degree DESC
+                LIMIT 1
+                RETURN r.title AS title
+                """
+                r_repo = session.run(q_m_repo, project_id=project_id).single()
+                if r_repo and r_repo["title"]:
+                    insights["most_connected_repo"] = r_repo["title"]
+
+                q_m_dataset = """
+                MATCH (d:Dataset) WHERE d.project_id = $project_id
+                OPTIONAL MATCH (d)-[rel:RELATED_TO]-()
+                WITH d, count(rel) AS degree
+                ORDER BY degree DESC
+                LIMIT 1
+                RETURN d.title AS title
+                """
+                r_dataset = session.run(q_m_dataset, project_id=project_id).single()
+                if r_dataset and r_dataset["title"]:
+                    insights["most_connected_dataset"] = r_dataset["title"]
+
+        except Exception as e:
+            print(f"Failed to query Neo4j graph insights: {e}")
+            insights["error"] = str(e)
+        return insights
+
+
 
 def build_graph(
     db: Session,
