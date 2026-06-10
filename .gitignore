@@ -1,0 +1,229 @@
+# =========================
+
+# Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+
+.venv/
+venv/
+env/
+ENV/
+
+# Python packaging
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pytest
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Mypy
+
+.mypy_cache/
+
+# Ruff
+
+.ruff_cache/
+
+# =========================
+
+# Environment Variables
+
+# =========================
+
+.env
+.env.*
+!.env.example
+
+# =========================
+
+# IDEs
+
+# =========================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+
+# Logs
+
+# =========================
+
+logs/
+*.log
+
+# =========================
+
+# Database
+
+# =========================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# PostgreSQL dumps
+
+*.sql.gz
+*.dump
+
+# =========================
+
+# Uploads / Research Data
+
+# =========================
+
+downloads/
+papers/
+datasets/
+exports/
+reports/
+
+# PDF corpus
+
+data/
+backend/data/
+
+# Generated reports
+
+generated_reports/
+
+# =========================
+
+# Embeddings / Vector Data
+
+# =========================
+
+qdrant_storage/
+qdrant_data/
+embeddings/
+
+# =========================
+
+# Redis
+
+# =========================
+
+redis-data/
+
+# =========================
+
+# Neo4j
+
+# =========================
+
+neo4j/data/
+neo4j/logs/
+neo4j/import/
+neo4j/plugins/
+
+# =========================
+
+# Ollama
+
+# =========================
+
+ollama-data/
+
+# =========================
+
+# n8n
+
+# =========================
+
+n8n_data/
+
+# =========================
+
+# React / Node
+
+# =========================
+
+node_modules/
+
+frontend/node_modules/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React build outputs
+
+frontend/dist/
+frontend/build/
+
+# Vite
+
+.vite/
+
+# =========================
+
+# Docker
+
+# =========================
+
+docker-volumes/
+*.tar
+
+# =========================
+
+# OS Files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# Jupyter
+
+# =========================
+
+.ipynb_checkpoints/
+
+# =========================
+
+# Secrets
+
+# =========================
+
+secrets/
+credentials/
+service_account.json
+google_credentials.json
+
+# =========================
+
+# Temporary Files
+
+# =========================
+
+tmp/
+temp/
+*.tmp
+
+# =========================
+
+# Research Artifacts
+
+# =========================
+
+research_outputs/
+patent_exports/
+literature_exports/
+fusion_reports/
