@@ -2,9 +2,10 @@ from fastapi import FastAPI
 
 from app.api.projects import router
 from app.api.research_runs import router as run_router
-from app.api.research_runs import router as run_router
 from app.api.downloads import router as downloads_router
 from app.api.extract import router as extract_router
+from app.api.patents import router as patent_router
+from app.api.datasets import router as dataset_router
 
 app = FastAPI(
     title="AROS"
@@ -121,4 +122,16 @@ app.include_router(
     fusion_router,
     prefix="/fusion",
     tags=["Fusion"]
+)
+
+app.include_router(
+    patent_router,
+    prefix="/patents",
+    tags=["Patents"]
+)
+
+app.include_router(
+    dataset_router,
+    prefix="/datasets",
+    tags=["Datasets"]
 )
