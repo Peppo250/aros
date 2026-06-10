@@ -16,6 +16,9 @@ from app.models.trend import TrendSignal
 from app.models.citation import CitationRecord
 from app.models.fusion_report_v2 import FusionReportV2
 from app.models.research_gap_v2 import ResearchGapReportV2
+from app.models.novelty_report import NoveltyReport
+from app.models.patent_opportunity import PatentOpportunity
+from app.models.report_v1 import ReportV1
 FusionReport.metadata.create_all(bind=engine)
 GithubRepo.metadata.create_all(bind=engine)
 ResearchGap.metadata.create_all(bind=engine)
@@ -32,5 +35,8 @@ TrendSignal.metadata.create_all(bind=engine)
 CitationRecord.metadata.create_all(bind=engine)
 FusionReportV2.metadata.create_all(bind=engine)
 ResearchGapReportV2.metadata.create_all(bind=engine)
+NoveltyReport.metadata.create_all(bind=engine)
+PatentOpportunity.metadata.create_all(bind=engine)
+ReportV1.metadata.create_all(bind=engine)
 
 print("Database initialized")

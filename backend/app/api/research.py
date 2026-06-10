@@ -1,12 +1,11 @@
-import requests
-
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
 
 from app.database.db import get_db
-from app.models.research_run import ResearchRun
+from app.services.orchestrator import start_research_run
 
 router = APIRouter()
 
@@ -16,31 +15,12 @@ def start_research(
     payload: dict,
     db: Session = Depends(get_db)
 ):
-
-    project_id = payload["project_id"]
-    topic = payload["topic"]
-
-    run = ResearchRun(
-        project_id=project_id,
-        status="queued"
-    )
-
-    db.add(run)
-    db.commit()
-    db.refresh(run)
-
-    webhook_url = "http://localhost:5678/webhook-test/research"
-
-    requests.post(
-        webhook_url,
-        json={
-            "run_id": str(run.id),
-            "project_id": project_id,
-            "topic": topic
-        }
-    )
-
-    return {
-        "run_id": str(run.id),
-        "status": run.status
-    }
+    topic = payload.get("topic")
+    if not topic:
+        raise HTTPException(status_code=400, detail="Missing required 'topic' field in payload")
+        
+    try:
+        result = start_research_run(db, topic)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to start orchestrator run: {str(e)}")

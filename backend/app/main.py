@@ -9,11 +9,20 @@ from app.api.datasets import router as dataset_router
 from app.api.trends import router as trend_router
 from app.api.graph import router as graph_router
 from app.api.citations import router as citation_router
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(
     title="AROS"
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(
     extract_router,
     prefix="/extract",
@@ -126,6 +135,15 @@ from app.api.fusion_v2 import (
 from app.api.research_gap_v2 import (
     router as gap_v2_router
 )
+from app.api.novelty import (
+    router as novelty_router
+)
+from app.api.patent_opportunity import (
+    router as patent_op_router
+)
+from app.api.report_v1 import (
+    router as report_v1_router
+)
 
 app.include_router(
     fusion_router,
@@ -143,6 +161,24 @@ app.include_router(
     gap_v2_router,
     prefix="/research-gap-v2",
     tags=["Research Gap V2"]
+)
+
+app.include_router(
+    novelty_router,
+    prefix="/novelty",
+    tags=["Novelty"]
+)
+
+app.include_router(
+    patent_op_router,
+    prefix="/patent-opportunity",
+    tags=["Patent Opportunity"]
+)
+
+app.include_router(
+    report_v1_router,
+    prefix="/report-v1",
+    tags=["Report V1"]
 )
 
 app.include_router(
