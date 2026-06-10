@@ -12,6 +12,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.research_gap import ResearchGap
 from app.models.github_repo import GithubRepo
 from app.models.fusion_report import FusionReport
+from app.models.trend import TrendSignal
 FusionReport.metadata.create_all(bind=engine)
 GithubRepo.metadata.create_all(bind=engine)
 ResearchGap.metadata.create_all(bind=engine)
@@ -24,5 +25,6 @@ Repository.metadata.create_all(bind=engine)
 Dataset.metadata.create_all(bind=engine)
 Report.metadata.create_all(bind=engine)
 ResearchOpportunity.metadata.create_all(bind=engine)
+TrendSignal.metadata.create_all(bind=engine)
 
 print("Database initialized")

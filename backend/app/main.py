@@ -6,6 +6,7 @@ from app.api.downloads import router as downloads_router
 from app.api.extract import router as extract_router
 from app.api.patents import router as patent_router
 from app.api.datasets import router as dataset_router
+from app.api.trends import router as trend_router
 
 app = FastAPI(
     title="AROS"
@@ -134,4 +135,10 @@ app.include_router(
     dataset_router,
     prefix="/datasets",
     tags=["Datasets"]
+)
+
+app.include_router(
+    trend_router,
+    prefix="/trends",
+    tags=["Trends"]
 )
