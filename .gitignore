@@ -96,7 +96,7 @@ reports/
 # PDF corpus
 
 data/
-backend/data/
+src/backend/data/
 
 # Generated reports
 

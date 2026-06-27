@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../backend')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src/backend')))
 
 from fastapi.testclient import TestClient
 from app.main import app
@@ -12,6 +12,16 @@ project_id = "48f7c41b-e795-40a4-8500-3363ab565412"
 
 def verify_citations_api():
     print(f"Project ID used for verification: {project_id}")
+    print("=" * 60)
+
+    # Clean existing database records for this test project to ensure test repeatability
+    db = SessionLocal()
+    try:
+        db.query(CitationRecord).filter(CitationRecord.project_id == project_id).delete()
+        db.commit()
+        print("Pre-existing test citation records cleared from database.")
+    finally:
+        db.close()
     print("=" * 60)
 
     # 1. First run of POST (Collection)

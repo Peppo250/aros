@@ -40,3 +40,17 @@ services:
       - DB_TYPE=sqlite
     volumes:
       - ./data/n8n:/home/node/.n8n
+
+  neo4j:
+    image: neo4j:5
+    container_name: aros-neo4j
+    restart: unless-stopped
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - ./data/neo4j/data:/data
+      - ./data/neo4j/logs:/logs
+
